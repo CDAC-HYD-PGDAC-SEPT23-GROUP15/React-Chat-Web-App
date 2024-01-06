@@ -1,0 +1,22 @@
+{
+  "name": "reach-chat-web-app-backend",
+  "version": "1.0.0",
+  "description": "CDAC PGDAC HYD SEPT23 Batch Group 15 Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CDAC-HYD-PGDAC-SEPT23-GROUP15/React-Chat-Web-App.git"
+  },
+  "author": "Utkarsh Shrivastava",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CDAC-HYD-PGDAC-SEPT23-GROUP15/React-Chat-Web-App/issues"
+  },
+  "homepage": "https://github.com/CDAC-HYD-PGDAC-SEPT23-GROUP15/React-Chat-Web-App#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
