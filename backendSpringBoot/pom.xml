@@ -5,26 +5,18 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.2</version>
+		<version>3.2.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>backend-springboot</artifactId>
+	<artifactId>backendSpringBoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend-springboot</name>
-	<description>Built with React, Spring Boot, Socket.IO, and MongoDB for seamless communication. Features user registration, secure login, and interactive chat. Delivering a cutting-edge, scalable, and user-friendly platform for instant and dynamic conversations.</description>
+	<name>backendSpringBoot</name>
+	<description>A Chat Web App built using the Spring Boot, React,MongoDB and Socket.IO. Created for educational purposes, this project is a result of hands-on learning through various tutorials and resources.  It serves as a practical exploration of different web stack technologies, showcasing the application of real-time communication with Socket.IO. </description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
@@ -41,6 +33,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -50,6 +47,17 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Spring Data JPA Starter -->
+		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>2.6.1</version> <!-- Adjust to your desired Spring Boot version -->
+		</dependency>
+		<dependency>
+   			<groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
 	</dependencies>
 
 	<build>
@@ -57,6 +65,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
