@@ -1,3 +1,4 @@
+// backend/server.js
 const express = require("express");
 const dummyData = require("./dummydata/dummydata");
 const { config: configDotenv } = require("dotenv");
@@ -9,6 +10,10 @@ const app = express();
 
 app.get("/", (req, res) => {
   res.send("API is running");
+});
+app.get("/api/chat", (req, res) => {
+  console.log(req.params.id);
+  res.send(dummyData);
 });
 
 app.get("/api/chat/:id", (req, res) => {
