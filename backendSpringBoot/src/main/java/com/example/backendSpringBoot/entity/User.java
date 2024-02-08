@@ -1,16 +1,41 @@
 package com.example.backendSpringBoot.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class User {
+
+    @Id
+    private String id;
     private String name;
     private String email;
+    private String password;
+    private String pic; // URL to user's profile picture
 
-    // Constructor
-    public User(String name, String email) {
-        this.name = name;
-        this.email = email;
+    // Default constructor
+    public User() {
+        // Default constructor
     }
 
-    // Getters and setters (if needed)
+    // Parameterized constructor
+    public User(String name, String email, String password, String pic) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.pic = pic;
+    }
+
+    // Getter and Setter for id
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Getter and Setter for name
     public String getName() {
         return name;
     }
@@ -19,11 +44,30 @@ public class User {
         this.name = name;
     }
 
+    // Getter and Setter for email
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    // Getter and Setter for password
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // Getter and Setter for pic
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }
