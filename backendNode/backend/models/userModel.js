@@ -1,31 +1,39 @@
-// userModel.js
-
+//userModel.js
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const bcrypt = require("bcryptjs");
 
-const userSchema = new Schema(
+const userSchema = mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true, // Ensures email uniqueness
-    },
-    password: {
-      type: String,
-      required: true,
-    },
+    name: { type: "String", required: true },
+    email: { type: "String", unique: true, required: true },
+    password: { type: "String", required: true },
     pic: {
-      type: String, // Assuming pic is stored as a URL
+      type: "String",
+      required: true,
       default:
-        "https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg", // Default profile picture URL
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
-  { timestamps: true }
+  { timestaps: true }
 );
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified) {
+    next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 const User = mongoose.model("User", userSchema);
 

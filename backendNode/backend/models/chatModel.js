@@ -1,38 +1,20 @@
-//file name for node version chatModel.js
-
-//chatName
-//isGroupChat
-//users
-//latestMessage
-//groupAdmin
-
+//chatModel.js
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
-const chatSchema = new Schema({
-  chatName: {
-    type: String,
-    required: true,
-  },
-  isGroupChat: {
-    type: Boolean,
-    required: true,
-  },
-  users: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User", // Assuming 'User' is the name of the collection you want to reference
+const chatModel = mongoose.Schema(
+  {
+    chatName: { type: String, trim: true },
+    isGroupChat: { type: Boolean, default: false },
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    latestMessage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message",
     },
-  ],
-  latestMessage: {
-    type: String,
+    groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  groupAdmin: {
-    type: Schema.Types.ObjectId,
-    ref: "User", // Reference to the 'User' collection
-  },
-});
+  { timestamps: true }
+);
 
-const Chat = mongoose.model("Chat", chatSchema);
+const Chat = mongoose.model("Chat", chatModel);
 
 module.exports = Chat;

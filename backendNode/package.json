@@ -1,14 +1,16 @@
 {
   "name": "react-chat-app-backendnode",
   "version": "1.0.0",
-  "description": "Built with React, Spring Boot, Socket.IO, and MongoDB for seamless communication. Features user registration, secure login, and interactive chat. Delivering a cutting-edge, scalable, and user-friendly platform for instant and dynamic conversations.",
+  "description": "Built with React, Node.js with Express.js, Socket.IO, and MongoDB for seamless communication. Features user registration, secure login, and interactive chat. Delivering a cutting-edge, scalable, and user-friendly platform for instant and dynamic conversations.",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon ./backend/server.js"
+    "start": "nodemon ./backend/server.js",
+    "server": "nodemon backend/server.js",
+    "build": "npm install --legacy-peer-deps && npm install --legacy-peer-deps --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/CDAC-HYD-PGDAC-SEPT23-GROUP15/React-Chat-Web-App.git"
+    "url": "https://github.com/CDAC-HYD-PGDAC-SEPT23-GROUP15/React-Chat-Web-App.git"
   },
   "author": "Utkarsh Shrivastava",
   "license": "ISC",
@@ -17,9 +19,14 @@
   },
   "homepage": "https://github.com/CDAC-HYD-PGDAC-SEPT23-GROUP15/React-Chat-Web-App#readme",
   "dependencies": {
-    "dotenv": "^16.4.1",
-    "express": "^4.18.2",
-    "mongoose": "^8.1.1",
-    "nodemon": "^3.0.3"
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^5.12.9",
+    "nodemon": "^2.0.7",
+    "socket.io": "^4.1.2"
   }
 }
