@@ -202,8 +202,11 @@ function SideDrawer() {
               rightIcon={<ChevronDownIcon />}
               fontFamily="cursive"
               fontWeight="bold"
-              h="70px"
+              h="50px"
               w="200px"
+              _hover={{ bgColor: "transparent" }} // Remove white highlight on hover
+              _active={{ bgColor: "transparent" }} // Remove highlight on click
+              _focus={{ boxShadow: "none" }} // Remove outline highlight on focus
             >
               <Avatar
                 size="sm"
@@ -212,12 +215,17 @@ function SideDrawer() {
                 src={user.pic}
                 mr={2}
               />
-              <Text fontWeight="bold" mr={2} color="white">
+              <Text fontWeight="bold" fontSize="xs" mr={2} color="white">
                 {" "}
                 {/* Set the text color to white */}
-                Welcome
+                Welcome,
               </Text>
-              <Text fontWeight="bold" fontStyle="italic" color="white">
+              <Text
+                fontWeight="bold"
+                fontSize="sm"
+                fontStyle="italic"
+                color="white"
+              >
                 {" "}
                 {/* Set the text color to white */}
                 {user.name}

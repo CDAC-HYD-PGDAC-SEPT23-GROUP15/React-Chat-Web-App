@@ -99,11 +99,14 @@ const Signup = () => {
 
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
+      const uploadPreset = "chat-app";
+      const cloudName = "piyushproj";
+      const cloudinaryUploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
       data.append("file", pics);
-      data.append("upload_preset", "react-chat-web-application");
-      data.append("cloud_name", "dpd7aw7dv");
+      data.append("upload_preset", uploadPreset);
+      data.append("cloud_name", cloudName);
 
-      fetch("https://api.cloudinary.com/v1_1/dpd7aw7dv/image/upload", {
+      fetch(cloudinaryUploadUrl, {
         method: "post",
         body: data,
       })

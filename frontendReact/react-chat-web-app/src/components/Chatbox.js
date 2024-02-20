@@ -17,6 +17,7 @@ const Chatbox = ({ fetchAgain, setFetchAgain }) => {
       borderRadius="lg"
       borderWidth="1px"
       boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)" // Add a subtle shadow
+      h="630px" // Adjust the height here
     >
       <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
     </Box>

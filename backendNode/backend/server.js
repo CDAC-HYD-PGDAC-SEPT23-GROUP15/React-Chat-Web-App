@@ -84,6 +84,9 @@ io.on("connection", (socket) => {
       socket.in(user._id).emit("message recieved", newMessageRecieved);
     });
   });
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
 
   socket.off("setup", () => {
     console.log("USER DISCONNECTED");

@@ -33,7 +33,7 @@ const UserListItem = ({ user, handleFunction }) => {
       <Box>
         <Text fontWeight="bold">{user.name}</Text> {/* Bold name */}{" "}
         <Text fontSize="xs">
-          <b>Email is: </b>
+          <b>Email: </b>
           {user.email}
         </Text>
       </Box>

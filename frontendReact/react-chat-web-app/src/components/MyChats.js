@@ -3,7 +3,7 @@ import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getSender } from "../config/ChatLogics";
+import { getSender, getSenderPic } from "../config/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
@@ -13,12 +13,20 @@ import { Avatar } from "@chakra-ui/avatar";
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-  const [viewedMessage, setViewedMessage] = useState(false);
+  const {
+    selectedChat,
+    setSelectedChat,
+    notification,
+    setNotification,
+    user,
+    chats,
+    setChats,
+  } = ChatState();
   const toast = useToast();
 
   const fetchChats = async () => {
-    // console.log(user._id);
+    console.log(user._id);
+
     try {
       const config = {
         headers: {
@@ -57,6 +65,7 @@ const MyChats = ({ fetchAgain }) => {
       borderRadius="lg"
       borderWidth="1px"
       boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)" // Add a subtle shadow
+      h="630px" // Adjust the height here
     >
       <Box
         pb={3}
@@ -69,7 +78,7 @@ const MyChats = ({ fetchAgain }) => {
         alignItems="center"
         color="#FFFFFF" // White color for better visibility on black background
       >
-        <Text fontWeight="bold">My Chats</Text> {/* Make text bold */}
+        <Text fontWeight="bold">Chat List</Text> {/* Make text bold */}
         <GroupChatModal>
           <Button
             d="flex"
@@ -113,7 +122,10 @@ const MyChats = ({ fetchAgain }) => {
               <Box
                 onClick={() => {
                   setSelectedChat(chat);
-                  setViewedMessage(true);
+                  // Remove the chat from the list of notifications
+                  setNotification(
+                    notification.filter((n) => n.chat._id !== chat._id)
+                  );
                 }}
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
@@ -123,13 +135,15 @@ const MyChats = ({ fetchAgain }) => {
                 borderRadius="lg"
                 key={chat._id}
               >
-                <Box d="flex" alignItems="center">
+                <Box d="flex" alignItems="center" position="relative">
                   {/* User's profile picture */}
+                  {/* Console logs to check the name and pic */}
+
                   <Avatar
                     size="sm"
                     cursor="pointer"
                     name={getSender(loggedUser, chat.users).name}
-                    src={getSender(loggedUser, chat.users).pic}
+                    src={getSenderPic(loggedUser, chat.users)}
                     mr={2}
                   />
 
@@ -137,13 +151,23 @@ const MyChats = ({ fetchAgain }) => {
                   {!chat.isGroupChat
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
-                </Box>
 
-                {chat.latestMessage && !viewedMessage && (
-                  <Text fontSize="xs" color="green">
-                    <b>New message</b>
-                  </Text>
-                )}
+                  {/* Notification Badge */}
+                  {notification.some((n) => n.chat._id === chat._id) && (
+                    <Box
+                      w="16px"
+                      h="16px"
+                      bg="red.500"
+                      borderRadius="50%"
+                      position="absolute"
+                      top="-4px"
+                      right="-4px"
+                      boxShadow="0 0 10px rgba(255, 0, 0, 0.6)"
+                      border={`2px solid rgba(255, 0, 0, 0.8)`}
+                      zIndex="1"
+                    />
+                  )}
+                </Box>
               </Box>
             ))}
           </Stack>
