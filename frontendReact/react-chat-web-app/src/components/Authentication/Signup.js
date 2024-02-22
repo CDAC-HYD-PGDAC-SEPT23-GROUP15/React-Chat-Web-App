@@ -6,7 +6,8 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router";
-
+import { IconButton } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 const Signup = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -99,8 +100,8 @@ const Signup = () => {
 
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
-      const uploadPreset = "chat-app";
-      const cloudName = "piyushproj";
+      const uploadPreset = "ld1ennkc";
+      const cloudName = "dpd7aw7dv";
       const cloudinaryUploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
       data.append("file", pics);
       data.append("upload_preset", uploadPreset);
@@ -170,16 +171,15 @@ const Signup = () => {
             _focus={{ borderColor: "blue.500" }}
           />
           <InputRightElement width="4.5rem">
-            <Button
-              h="1.75rem"
+            <IconButton
+              icon={show ? <ViewOffIcon /> : <ViewIcon />}
               size="sm"
               onClick={handleClick}
-              bg="blue.500"
+              bg="linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%)"
               color="white"
               _hover={{ bg: "blue.600" }}
-            >
-              {show ? "Hide" : "Show"}
-            </Button>
+              aria-label={show ? "Hide" : "Show"}
+            />
           </InputRightElement>
         </InputGroup>
       </FormControl>
@@ -196,16 +196,15 @@ const Signup = () => {
             _focus={{ borderColor: "blue.500" }}
           />
           <InputRightElement width="4.5rem">
-            <Button
-              h="1.75rem"
+            <IconButton
+              icon={show ? <ViewOffIcon /> : <ViewIcon />}
               size="sm"
               onClick={handleClick}
-              bg="blue.500"
+              bg="linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%)"
               color="white"
               _hover={{ bg: "blue.600" }}
-            >
-              {show ? "Hide" : "Show"}
-            </Button>
+              aria-label={show ? "Hide" : "Show"}
+            />
           </InputRightElement>
         </InputGroup>
       </FormControl>

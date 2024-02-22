@@ -7,7 +7,8 @@ import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
-
+import { IconButton } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -99,16 +100,15 @@ const Login = () => {
             _focus={{ borderColor: "blue.500" }}
           />
           <InputRightElement width="4.5rem">
-            <Button
-              h="1.75rem"
+            <IconButton
+              icon={show ? <ViewOffIcon /> : <ViewIcon />}
               size="sm"
               onClick={handleClick}
-              bg="blue.500"
+              bg="linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%)"
               color="white"
               _hover={{ bg: "blue.600" }}
-            >
-              {show ? "Hide" : "Show"}
-            </Button>
+              aria-label={show ? "Hide" : "Show"}
+            />
           </InputRightElement>
         </InputGroup>
       </FormControl>
@@ -118,6 +118,15 @@ const Login = () => {
         onClick={submitHandler}
         isLoading={loading}
         _hover={{ bg: "blue.600" }}
+        css={{
+          background:
+            "linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%)",
+          border: "none", // Optionally remove the border
+          borderRadius: "md", // Optionally adjust the border radius
+          color: "white", // Set text color to white
+          fontWeight: "bold", // Optionally set font weight
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Optionally add a subtle shadow
+        }}
       >
         Login
       </Button>
