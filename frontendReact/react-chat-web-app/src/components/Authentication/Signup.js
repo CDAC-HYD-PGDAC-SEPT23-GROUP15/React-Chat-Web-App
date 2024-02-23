@@ -227,6 +227,12 @@ const Signup = () => {
         onClick={submitHandler}
         isLoading={picLoading}
         _hover={{ bg: "blue.600" }}
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%)",
+          color: "white", // Optionally, you can set text color
+          border: "none", // Optionally, you can remove border
+        }}
       >
         Sign Up
       </Button>
