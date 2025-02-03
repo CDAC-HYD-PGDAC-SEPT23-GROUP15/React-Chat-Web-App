@@ -1,4 +1,4 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, NotAllowedIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
@@ -40,6 +40,66 @@ const MyChats = ({ fetchAgain }) => {
       toast({
         title: "Error Occured!",
         description: "Failed to Load the chats",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const handleDeleteChat = async (chatId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      await axios.delete(`/api/chat/${chatId}`, config);
+
+      fetchChats();
+    } catch (error) {
+      console.error("Failed to delete chat:", error);
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to delete the chat",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const handleBlockChat = async (chatId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      await axios.put(`/api/chat/block/${chatId}`, {}, config);
+
+      // Remove the blocked chat from the chat list
+      setChats(chats.filter((chat) => chat._id !== chatId));
+      // Optional: Log the name of the chat being blocked
+      // Optional: Log the name of the chat and sender
+      const blockedChat = chats.find((chat) => chat._id === chatId);
+      if (blockedChat) {
+        console.log(
+          "Blocking chat:",
+          blockedChat.chatName,
+          "from sender:",
+          blockedChat.sender
+        );
+      }
+    } catch (error) {
+      console.error("Failed to block chat:", error);
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to block the chat",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -120,6 +180,7 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
+                key={chat._id}
                 onClick={() => {
                   setSelectedChat(chat);
                   // Remove the chat from the list of notifications
@@ -133,12 +194,10 @@ const MyChats = ({ fetchAgain }) => {
                 px={3}
                 py={2}
                 borderRadius="lg"
-                key={chat._id}
+                position="relative" // Added position relative
               >
-                <Box d="flex" alignItems="center" position="relative">
+                <Box d="flex" alignItems="center">
                   {/* User's profile picture */}
-                  {/* Console logs to check the name and pic */}
-
                   <Avatar
                     size="sm"
                     cursor="pointer"
@@ -168,6 +227,34 @@ const MyChats = ({ fetchAgain }) => {
                     />
                   )}
                 </Box>
+                {/* Delete Icon */}
+                <DeleteIcon
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    handleDeleteChat(chat._id);
+                  }}
+                  color="red.500"
+                  cursor="pointer"
+                  position="absolute"
+                  top="50%"
+                  right="5px"
+                  transform="translateY(-50%)"
+                />
+                {/* Block Icon */}
+                <NotAllowedIcon
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    handleBlockChat(chat._id);
+                  }}
+                  color="gray.500"
+                  cursor="pointer"
+                  position="absolute"
+                  top="50%"
+                  right="25px"
+                  transform="translateY(-50%)"
+                />
               </Box>
             ))}
           </Stack>

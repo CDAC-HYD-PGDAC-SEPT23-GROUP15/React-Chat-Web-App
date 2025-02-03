@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
+const BlockedChat = require("../models/blockedChatModel");
 
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/
@@ -192,6 +193,78 @@ const addToGroup = asyncHandler(async (req, res) => {
     res.json(added);
   }
 });
+// @desc    Delete a chat item
+// @route   DELETE /api/chat/:id
+// @access  Private
+const deleteChat = asyncHandler(async (req, res) => {
+  const chat = await Chat.findById(req.params.id);
+
+  if (!chat) {
+    res.status(404);
+    throw new Error("Chat not found");
+  }
+
+  await chat.remove();
+  res.json({ message: "Chat removed" });
+});
+// chatControllers.js
+
+// @desc    Block a chat
+// @route   PUT /api/chat/block/:id
+// @access  Private
+const blockChat = asyncHandler(async (req, res) => {
+  const chatId = req.params.id;
+
+  // Check if chat exists
+  const chat = await Chat.findById(chatId);
+  if (!chat) {
+    res.status(404);
+    throw new Error("Chat not found");
+  }
+
+  // Update the blocked field to true
+  chat.blocked = true;
+  await chat.save();
+
+  res.json({ message: "Chat blocked" });
+});
+
+// @desc    Unblock a chat
+// @route   PUT /api/chat/unblock/:id
+// @access  Private
+const unblockChat = asyncHandler(async (req, res) => {
+  const chatId = req.params.id;
+
+  // Check if blocked chat exists
+  const blockedChat = await BlockedChat.findOne({ chat: chatId });
+  if (!blockedChat) {
+    res.status(404);
+    throw new Error("Blocked chat not found");
+  }
+
+  // Remove the blocked chat
+  await blockedChat.remove();
+
+  // Restore the chat in regular chats
+  await Chat.create(blockedChat);
+
+  res.json({ message: "Chat unblocked" });
+});
+
+// @desc    Get blocked chats
+// @route   GET /api/chat/blocked
+// @access  Private
+const getBlockedChats = asyncHandler(async (req, res) => {
+  try {
+    console.log("Fetching blocked chats...");
+    const blockedChats = await Chat.find({ blocked: true }).populate("users");
+    console.log("Blocked chats fetched successfully:", blockedChats);
+    res.json(blockedChats);
+  } catch (error) {
+    console.error("Error fetching blocked chats:", error);
+    res.status(500).json({ error: "Failed to fetch blocked chats" });
+  }
+});
 
 module.exports = {
   accessChat,
@@ -200,4 +273,8 @@ module.exports = {
   renameGroup,
   addToGroup,
   removeFromGroup,
+  deleteChat,
+  blockChat,
+  unblockChat,
+  getBlockedChats,
 };

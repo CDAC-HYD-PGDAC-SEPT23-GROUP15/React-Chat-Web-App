@@ -11,6 +11,7 @@ const chatModel = mongoose.Schema(
       ref: "Message",
     },
     groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    blocked: { type: Boolean, default: false }, // New field for tracking blocked chats
   },
   { timestamps: true }
 );

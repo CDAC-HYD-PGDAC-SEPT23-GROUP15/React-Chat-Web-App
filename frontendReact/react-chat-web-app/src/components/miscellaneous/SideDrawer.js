@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Text, Flex } from "@chakra-ui/layout";
 import {
   Menu,
   MenuButton,
@@ -20,7 +20,7 @@ import { Tooltip } from "@chakra-ui/tooltip";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import ChatLoading from "../ChatLoading";
@@ -31,12 +31,22 @@ import { Effect } from "react-notification-badge";
 import { getSender } from "../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/modal";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
+  const [blockedChats, setBlockedChats] = useState([]); // State to hold blocked chats
 
   const {
     setSelectedChat,
@@ -49,6 +59,11 @@ function SideDrawer() {
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isBlockedChatsOpen,
+    onOpen: onOpenBlockedChats,
+    onClose: onCloseBlockedChats,
+  } = useDisclosure(); // State and functions for blocked chats modal
   const history = useHistory();
 
   const logoutHandler = () => {
@@ -84,7 +99,7 @@ function SideDrawer() {
       setSearchResult(data);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: "Failed to Load the Search Results",
         status: "error",
         duration: 5000,
@@ -115,6 +130,53 @@ function SideDrawer() {
       toast({
         title: "Error fetching the chat",
         description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const handleViewBlockedChats = () => {
+    axios
+      .get("/api/chat/blocked", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+      .then((response) => {
+        console.log("Fetched blocked chats:", response.data);
+        setBlockedChats(response.data);
+        onOpenBlockedChats();
+      })
+      .catch((error) => {
+        console.error("Error fetching blocked chats:", error);
+        // Handle error
+      });
+  };
+
+  useEffect(() => {
+    console.log("Blocked chats:", blockedChats);
+  }, [blockedChats]);
+  const handleUnblockChat = async (chatId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      // Update the chat to unblock it
+      await axios.put(`/api/chat/unblock/${chatId}`, {}, config);
+
+      // Remove the unblocked chat from the blockedChats list
+      setBlockedChats(blockedChats.filter((chat) => chat._id !== chatId));
+    } catch (error) {
+      console.error("Failed to unblock chat:", error);
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to unblock the chat",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -238,6 +300,10 @@ function SideDrawer() {
               </ProfileModal>
               <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+              <MenuDivider />
+              <MenuItem onClick={handleViewBlockedChats}>
+                Blocked Chats
+              </MenuItem>{" "}
             </MenuList>
           </Menu>
         </div>
@@ -275,6 +341,39 @@ function SideDrawer() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      {/* Blocked Chats Modal */}
+      {/* Blocked Chats Modal */}
+      <Modal isOpen={isBlockedChatsOpen} onClose={onCloseBlockedChats}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Blocked Chats</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Display the list of blocked chats */}
+            <Box>
+              {blockedChats.map((chat) => (
+                <Flex
+                  key={chat._id}
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text>{chat.users[1].name}</Text>
+                  <Button onClick={() => handleUnblockChat(chat._id)}>
+                    Unblock
+                  </Button>
+                </Flex>
+              ))}
+            </Box>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onCloseBlockedChats}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }
